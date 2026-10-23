@@ -10,17 +10,23 @@ No account, no server, no internet permission. Your spending lives in a normal `
 
 ## Screenshots
 
-<!-- Demo-mode screenshots: Home, Analysis, History (change log), Wallets, Bank SMS, Buddy notification -->
-| Home | Analysis | History |
-|---|---|---|
-| _soon_ | _soon_ | _soon_ |
+See the full page with all screens at **[mohamed-ibrahim47.github.io/buddy-expense-analysis-showcase](https://mohamed-ibrahim47.github.io/buddy-expense-analysis-showcase/)**.
+
+| Home | Credit cards | Debts & gam'eya | Analysis |
+|---|---|---|---|
+| <img src="images/home.webp" width="200" alt="Home"> | <img src="images/money-cards.webp" width="200" alt="Credit cards"> | <img src="images/money-debts.webp" width="200" alt="Debts and gam'eya"> | <img src="images/analysis-categories.webp" width="200" alt="Analysis"> |
+
+| Bank SMS | Wallets | Buddy's voices | بالعربي |
+|---|---|---|---|
+| <img src="images/sms.webp" width="200" alt="Bank SMS"> | <img src="images/wallets.webp" width="200" alt="Wallets"> | <img src="images/settings-buddy.webp" width="200" alt="Buddy's voices"> | <img src="images/home-ar.webp" width="200" alt="Home in Arabic"> |
 
 ## What it does
 
 - **Excel as the database.** Every amount is a cell in a month sheet (`oct 26`), sub-categories are cell notes, and hidden sheets keep the app's log and settings. Typed something straight into Excel? The app picks it up.
 - **Spending by day.** See what you spent each day. Raise an amount a week later and only the extra counts on the new day.
 - **Change history.** Every amount keeps the date it was added, plus a log of each later change.
-- **Wallets.** Put aside pocket money and let expenses come out of it, all of them, picked ones, or certain categories. A wallet stops at zero.
+- **Wallets.** Put aside pocket money and let expenses come out of it, all of them, picked ones, or certain categories. A wallet stops at zero, and an expense bigger than a picked wallet holds is refused.
+- **Cards, instalments and gam'eya.** Credit cards stacked like a phone wallet; instalments, loans and gam'eya as progress rings with the next payment, and your gam'eya payout turn marked.
 - **Sub-categories with totals.** Pharmacy, doctor, visits: collapsible groups with their own totals.
 - **Bank SMS capture.** Turn your bank's messages into expenses or income, grouped by date. Optional, this month by default, you pick the months.
 - **Overspending carries over.** Went past your salary on credit? Next month starts in the negative until you pay it back (a setting).
@@ -37,9 +43,9 @@ The Buddy isn't a list of fixed reminders. It works in three steps, all on the p
 
 ## How it's built
 
-- **Kotlin + Jetpack Compose**, Material 3, a 4-tab layout with swipe and a side menu.
+- **Kotlin + Jetpack Compose**, Material 3 in a "Night Sky" look: a 4-tab layout with swipe, a floating bottom bar and a side menu.
 - **Apache POI** reads and writes the workbook. Every save is checked (zip structure and checksums) before it replaces the file, and known causes of "Excel says the file is damaged" are repaired automatically on load.
-- **A pure-Kotlin core module** holds all the money logic (daily spending, wallets, carry-over, recurring, SMS parsing), covered by 240+ unit tests.
+- **A pure-Kotlin core module** holds all the money logic (daily spending, wallets, carry-over, recurring, SMS parsing), covered by 260+ unit tests.
 - **Two builds**: one without any SMS permission (paste/share a message instead), and one that reads the bank SMS inbox.
 
 ## Coming soon

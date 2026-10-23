@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Buddy Expense Analysis</title>
+<meta name="description" content="A personal finance app for Android that keeps your money in your own Excel file, with a Buddy that tells you when you're slipping. No account, no server, no internet permission.">
+<meta property="og:title" content="Buddy Expense Analysis">
+<meta property="og:description" content="Your money, in your own Excel file. With a Buddy who notices.">
+<meta property="og:image" content="images/home.webp">
+<meta name="theme-color" content="#090B14">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Cairo:wght@500;700&display=swap">
+<style>
+:root {
+  --bg: #090B14; --s1: #111426; --s2: #161A33; --s3: #1F2443; --line: #262B4A;
+  --tx: #EDEEF6; --mu: #A5A9C4; --dim: #7C82A6;
+  --vi: #A78BFA; --pk: #EC4899; --te: #2DD4BF; --am: #FBBF24; --lime: #D4FF3A;
+  --grad: linear-gradient(135deg, #8B5CF6, #EC4899);
+  --hero: linear-gradient(135deg, #4338CA, #7C3AED 55%, #DB2777);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--bg); color: var(--tx); font: 16px/1.6 "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif; overflow-x: hidden; }
+a { color: var(--vi); text-decoration: none; }
+img { display: block; max-width: 100%; }
+.wrap { max-width: 1160px; margin: 0 auto; padding: 0 20px; }
+
+/* sky */
+.sky { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+.sky::before { content: ""; position: absolute; width: 900px; height: 900px; left: -200px; top: -520px; background: radial-gradient(circle, rgba(124,58,237,.45), transparent 62%); }
+.sky::after { content: ""; position: absolute; width: 700px; height: 700px; right: -260px; top: 40%; background: radial-gradient(circle, rgba(236,72,153,.18), transparent 65%); }
+.star { position: absolute; width: 2px; height: 2px; border-radius: 50%; background: #fff; opacity: .5; animation: twinkle 4s ease-in-out infinite; }
+@keyframes twinkle { 50% { opacity: .1; } }
+
+/* nav */
+nav { position: sticky; top: 0; z-index: 10; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); background: rgba(9,11,20,.7); border-bottom: 1px solid rgba(255,255,255,.06); }
+nav .wrap { display: flex; align-items: center; gap: 24px; height: 64px; }
+.logo { display: flex; align-items: center; gap: 10px; font-weight: 800; color: var(--tx); }
+.logo i { width: 34px; height: 34px; border-radius: 11px; background: var(--grad); display: grid; place-items: center; font-style: normal; color: #fff; box-shadow: 0 6px 18px rgba(236,72,153,.35); }
+nav .links { display: flex; gap: 22px; margin-left: auto; font-size: 14px; font-weight: 600; }
+nav .links a { color: var(--mu); }
+nav .links a:hover { color: var(--tx); }
+@media (max-width: 760px) { nav .links a:not(.keep) { display: none; } }
+
+/* hero */
+.hero { display: grid; grid-template-columns: 1.05fr 1fr; gap: 40px; align-items: center; padding: 72px 0 40px; }
+.badge { display: inline-flex; gap: 8px; align-items: center; font-size: 13px; font-weight: 700; padding: 6px 12px; border-radius: 99px; background: rgba(167,139,250,.12); border: 1px solid rgba(167,139,250,.3); color: #DDD3FF; }
+.badge b { width: 7px; height: 7px; border-radius: 50%; background: var(--te); box-shadow: 0 0 10px var(--te); }
+h1 { font-size: clamp(36px, 5.4vw, 62px); line-height: 1.05; letter-spacing: -0.03em; margin: 18px 0 18px; font-weight: 800; }
+h1 em { font-style: normal; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.lead { font-size: 18px; color: var(--mu); max-width: 540px; margin: 0 0 28px; }
+.cta { display: flex; gap: 12px; flex-wrap: wrap; }
+.btn { display: inline-flex; align-items: center; gap: 8px; min-height: 50px; padding: 0 22px; border-radius: 14px; font-weight: 700; font-size: 15px; transition: transform .2s, box-shadow .2s; }
+.btn.main { background: var(--grad); color: #fff; box-shadow: 0 10px 30px -8px rgba(236,72,153,.6); }
+.btn.ghost { border: 1px solid var(--line); color: var(--tx); background: rgba(255,255,255,.03); }
+.btn:hover { transform: translateY(-2px); }
+
+.phones { position: relative; height: 600px; perspective: 1400px; }
+.phone { position: absolute; width: 270px; border-radius: 34px; padding: 8px; background: #05060B; border: 1px solid #2A2F4D; box-shadow: 0 40px 80px -20px rgba(0,0,0,.8), 0 0 0 1px rgba(255,255,255,.04) inset; overflow: hidden; }
+.phone img { border-radius: 27px; }
+.phones .p1 { left: 50%; top: 10px; transform: translateX(-50%); z-index: 3; animation: float 7s ease-in-out infinite; }
+.phones .p2 { left: 0; top: 70px; transform: rotateY(18deg) rotateZ(-6deg) scale(.86); z-index: 2; opacity: .9; animation: float 8s ease-in-out -2s infinite; }
+.phones .p3 { right: 0; top: 70px; transform: rotateY(-18deg) rotateZ(6deg) scale(.86); z-index: 1; opacity: .9; animation: float 9s ease-in-out -4s infinite; }
+.phones .p1 { --base: translateX(-50%); }
+.phones .p2 { --base: rotateY(18deg) rotateZ(-6deg) scale(.86); }
+.phones .p3 { --base: rotateY(-18deg) rotateZ(6deg) scale(.86); }
+@keyframes float { 50% { transform: var(--base) translateY(-14px); } }
+.glow { position: absolute; left: 50%; top: 45%; width: 420px; height: 420px; transform: translate(-50%, -50%); background: radial-gradient(circle, rgba(139,92,246,.5), transparent 65%); filter: blur(10px); }
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; padding-top: 48px; }
+  .phones { height: 520px; }
+  .phone { width: 230px; }
+}
+@media (max-width: 520px) { .phones .p2, .phones .p3 { display: none; } }
+
+/* stats */
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 30px 0 10px; }
+.stat { padding: 20px; border-radius: 20px; background: linear-gradient(180deg, #181C36, #111426); border: 1px solid var(--line); }
+.stat b { display: block; font-size: 30px; font-weight: 800; letter-spacing: -0.02em; }
+.stat span { color: var(--mu); font-size: 14px; }
+@media (max-width: 760px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+
+/* sections */
+section { padding: 90px 0 20px; }
+.kicker { font-size: 13px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--vi); }
+h2 { font-size: clamp(28px, 3.6vw, 42px); letter-spacing: -0.02em; line-height: 1.12; margin: 10px 0 14px; }
+.sub { color: var(--mu); font-size: 17px; max-width: 640px; }
+.feature { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; margin-top: 40px; }
+.feature.flip .shots { order: -1; }
+.shots { display: flex; gap: 18px; justify-content: center; position: relative; }
+.shots .phone { position: relative; width: 250px; }
+.shots .phone + .phone { margin-top: 60px; }
+.shots::before { content: ""; position: absolute; inset: 10% 15%; background: radial-gradient(circle, var(--c, rgba(139,92,246,.35)), transparent 65%); filter: blur(20px); z-index: -1; }
+ul.ticks { list-style: none; padding: 0; margin: 22px 0 0; display: grid; gap: 12px; }
+ul.ticks li { display: grid; grid-template-columns: 28px 1fr; gap: 10px; color: #D6D9EA; }
+ul.ticks li::before { content: "✓"; width: 24px; height: 24px; border-radius: 8px; display: grid; place-items: center; font-size: 13px; font-weight: 800; background: rgba(45,212,191,.14); color: var(--te); margin-top: 1px; }
+ul.ticks b { color: #fff; }
+@media (max-width: 900px) {
+  .feature { grid-template-columns: 1fr; gap: 30px; }
+  .feature.flip .shots { order: 0; }
+  .shots .phone { width: 200px; }
+}
+@media (max-width: 480px) { .shots .phone + .phone { display: none; } .shots .phone { width: 240px; } }
+
+/* excel */
+.sheet { margin-top: 34px; border-radius: 20px; overflow: hidden; border: 1px solid var(--line); background: #0E1120; font-size: 14px; }
+.sheet .bar { display: flex; gap: 6px; padding: 10px 14px; background: #121633; border-bottom: 1px solid var(--line); align-items: center; }
+.sheet .bar i { width: 10px; height: 10px; border-radius: 50%; background: #3A4066; }
+.sheet .bar span { margin-left: 8px; color: var(--mu); font-size: 13px; }
+.grid { display: grid; grid-template-columns: 46px repeat(5, minmax(90px, 1fr)); overflow-x: auto; }
+.grid div { padding: 9px 12px; border-right: 1px solid #1B2040; border-bottom: 1px solid #1B2040; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.grid .h { background: #141938; color: var(--mu); font-weight: 700; }
+.grid .n { color: var(--dim); text-align: center; background: #10142B; }
+.grid .new { background: rgba(139,92,246,.18); box-shadow: inset 0 0 0 2px #8B5CF6; animation: pulse 2.4s ease-in-out infinite; }
+.grid .note { position: relative; }
+.grid .note::after { content: ""; position: absolute; top: 0; right: 0; border: 6px solid transparent; border-top-color: var(--am); border-right-color: var(--am); }
+@keyframes pulse { 50% { background: rgba(139,92,246,.06); } }
+.tabs { display: flex; gap: 2px; padding: 8px 10px 0; background: #121633; font-size: 13px; }
+.tabs span { padding: 6px 14px; border-radius: 8px 8px 0 0; color: var(--mu); }
+.tabs span.on { background: #0E1120; color: #fff; font-weight: 700; }
+.tabs span.hid { opacity: .4; font-style: italic; }
+
+/* buddy */
+.voices { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 34px; }
+.voice { padding: 20px; border-radius: 20px; background: linear-gradient(180deg, #181C36, #111426); border: 1px solid var(--line); transition: transform .25s, border-color .25s; }
+.voice:hover { transform: translateY(-4px); border-color: #3B3F6E; }
+.voice .who { display: flex; align-items: center; gap: 10px; font-weight: 800; }
+.voice .who span { font-size: 26px; }
+.voice p { margin: 12px 0 0; color: #D6D9EA; }
+.voice p.ar { font-family: Cairo, sans-serif; direction: rtl; text-align: right; color: var(--mu); font-size: 15px; margin-top: 8px; }
+.notif { margin-top: 26px; display: flex; gap: 12px; align-items: flex-start; max-width: 460px; padding: 14px 16px; border-radius: 18px; background: rgba(237,238,246,.95); color: #0B0D18; box-shadow: 0 20px 40px -10px rgba(0,0,0,.6); animation: drop 6s ease-in-out infinite; }
+.notif i { width: 34px; height: 34px; border-radius: 10px; background: var(--grad); display: grid; place-items: center; color: #fff; font-style: normal; font-weight: 800; flex-shrink: 0; }
+.notif small { display: block; color: #5B6272; font-size: 12px; }
+@keyframes drop { 0%, 8% { transform: translateY(-14px); opacity: 0; } 14%, 86% { transform: none; opacity: 1; } 94%, 100% { transform: translateY(-14px); opacity: 0; } }
+@media (max-width: 900px) { .voices { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .voices { grid-template-columns: 1fr; } }
+
+/* gallery */
+.gallery { display: flex; gap: 18px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 30px 4px 26px; margin-top: 10px; scrollbar-width: thin; scrollbar-color: #3A4066 transparent; }
+.gallery figure { margin: 0; flex: 0 0 220px; scroll-snap-align: start; }
+.gallery .phone { position: relative; width: 220px; cursor: zoom-in; transition: transform .25s; }
+.gallery .phone:hover { transform: translateY(-6px); }
+.gallery figcaption { text-align: center; color: var(--mu); font-size: 14px; margin-top: 12px; font-weight: 600; }
+
+/* privacy + tech */
+.cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 34px; }
+.card { padding: 22px; border-radius: 20px; background: linear-gradient(180deg, #181C36, #111426); border: 1px solid var(--line); }
+.card .ic { width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center; font-size: 22px; margin-bottom: 14px; }
+.card h3 { margin: 0 0 6px; font-size: 17px; }
+.card p { margin: 0; color: var(--mu); font-size: 14.5px; }
+@media (max-width: 900px) { .cards { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 520px) { .cards { grid-template-columns: 1fr; } }
+
+.soon { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 34px; }
+.soon .card { position: relative; overflow: hidden; }
+.soon .card::after { content: "Soon"; position: absolute; top: 18px; right: 18px; font-size: 12px; font-weight: 800; padding: 3px 10px; border-radius: 99px; background: rgba(251,191,36,.15); color: var(--am); }
+@media (max-width: 640px) { .soon { grid-template-columns: 1fr; } }
+
+.arabic { display: grid; grid-template-columns: auto 1fr; gap: 40px; align-items: center; margin-top: 40px; padding: 34px; border-radius: 28px; background: var(--hero); position: relative; overflow: hidden; }
+.arabic::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 85% 0%, rgba(255,255,255,.25), transparent 45%); }
+.arabic .phone { position: relative; width: 230px; }
+.arabic h2 { color: #fff; position: relative; }
+.arabic p { position: relative; color: rgba(255,255,255,.88); max-width: 520px; }
+.arabic .ar { font-family: Cairo, sans-serif; font-size: 26px; font-weight: 700; direction: rtl; color: #fff; position: relative; margin: 0 0 6px; }
+@media (max-width: 760px) { .arabic { grid-template-columns: 1fr; justify-items: center; text-align: center; } }
+
+footer { margin-top: 100px; padding: 40px 0 60px; border-top: 1px solid rgba(255,255,255,.06); color: var(--mu); font-size: 14px; }
+footer .wrap { display: flex; flex-wrap: wrap; gap: 16px; justify-content: space-between; }
+
+/* reveal */
+.reveal { opacity: 0; transform: translateY(26px); transition: opacity .8s cubic-bezier(.2,.8,.2,1), transform .8s cubic-bezier(.2,.8,.2,1); }
+.reveal.in { opacity: 1; transform: none; }
+
+/* lightbox */
+.lb { position: fixed; inset: 0; z-index: 50; background: rgba(3,4,10,.86); display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(6px); }
+.lb.on { display: flex; }
+.lb img { max-height: 92vh; width: auto; border-radius: 28px; box-shadow: 0 30px 80px rgba(0,0,0,.7); }
+.lb button { position: absolute; top: 18px; right: 18px; width: 48px; height: 48px; border-radius: 14px; border: 1px solid var(--line); background: var(--s2); color: #fff; font-size: 22px; cursor: pointer; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .reveal { opacity: 1; transform: none; }
+}
+</style>
+</head>
+<body>
+<div class="sky" id="sky"></div>
+
+<nav>
+  <div class="wrap">
+    <a class="logo" href="#top"><i>B</i>Buddy Expense Analysis</a>
+    <div class="links">
+      <a href="#features">Features</a>
+      <a href="#buddy">The Buddy</a>
+      <a href="#screens">Screens</a>
+      <a class="keep" href="privacy.html">Privacy</a>
+    </div>
+  </div>
+</nav>
+
+<main class="wrap" id="top">
+  <div class="hero">
+    <div class="reveal">
+      <span class="badge"><b></b>Android · English &amp; العربية · Version 4.0</span>
+      <h1>Your money, in <em>your own Excel file</em>. With a Buddy who notices.</h1>
+      <p class="lead">No account, no server, no internet permission. Every expense is a cell in a normal .xlsx file on your phone that you can open in Excel any time. The app reads it, writes to it, and makes sense of it.</p>
+      <div class="cta">
+        <a class="btn main" href="#screens">See it in action →</a>
+        <a class="btn ghost" href="#features">What it does</a>
+      </div>
+    </div>
+    <div class="phones" aria-hidden="true">
+      <div class="glow"></div>
+      <div class="phone p2"><img src="images/money-cards.webp" alt=""></div>
+      <div class="phone p3"><img src="images/analysis-categories.webp" alt=""></div>
+      <div class="phone p1"><img src="images/home.webp" alt="The Home screen"></div>
+    </div>
+  </div>
+
+  <div class="stats reveal">
+    <div class="stat"><b>0</b><span>accounts, servers or trackers</span></div>
+    <div class="stat"><b>1</b><span>Excel file: yours, readable anywhere</span></div>
+    <div class="stat"><b>260+</b><span>automated tests on the money logic</span></div>
+    <div class="stat"><b>2</b><span>languages, English and Arabic</span></div>
+  </div>
+
+  <section id="features">
+    <div class="feature reveal">
+      <div>
+        <div class="kicker">Home</div>
+        <h2>The whole month at a glance</h2>
+        <p class="sub">Open the app and know where you stand before you've finished your coffee.</p>
+        <ul class="ticks">
+          <li><span><b>A running line</b> of the month's spending against an even pace, and where the month is heading.</span></li>
+          <li><span><b>A double ring:</b> how much of your income is gone, and how much of the month has passed.</span></li>
+          <li><span><b>Buddy's note</b> on the one thing that stands out, like a category at twice its usual.</span></li>
+          <li><span><b>Step back</b> through earlier months, hide the total like a banking app, and see the next payments due.</span></li>
+        </ul>
+      </div>
+      <div class="shots"><div class="phone"><img src="images/home.webp" alt="Home: month total, running line, income ring and Buddy's note" loading="lazy"></div><div class="phone"><img src="images/home-2.webp" alt="Home: where the money went, by category" loading="lazy"></div></div>
+    </div>
+
+    <div class="feature flip reveal" style="--c: rgba(212,255,58,.22)">
+      <div>
+        <div class="kicker">Money in &amp; out</div>
+        <h2>Cards, instalments and gam'eya, sorted</h2>
+        <p class="sub">What's left this month after everything that's still due, and every commitment in one place.</p>
+        <ul class="ticks">
+          <li><span><b>Credit cards as a wallet stack.</b> Tap a card to bring it forward: amount owed, next statement and limit.</span></li>
+          <li><span><b>Instalments and loans</b> with a ring of months paid and the next payment.</span></li>
+          <li><span><b>Gam'eya</b> with a dot for every month and a star on your payout turn.</span></li>
+          <li><span><b>Pay full or minimum</b>, monthly repeats added by themselves, money you lent tracked until it's back.</span></li>
+        </ul>
+      </div>
+      <div class="shots"><div class="phone"><img src="images/money-cards.webp" alt="Credit cards stacked like a phone wallet" loading="lazy"></div><div class="phone"><img src="images/money-debts.webp" alt="Debts and gam'eya as progress tiles" loading="lazy"></div></div>
+    </div>
+
+    <div class="feature reveal" style="--c: rgba(96,165,250,.25)">
+      <div>
+        <div class="kicker">Analysis</div>
+        <h2>Learns what's normal for you</h2>
+        <p class="sub">Not generic advice: everything is measured against your own history.</p>
+        <ul class="ticks">
+          <li><span><b>Your average month</b>, and each category this month next to its usual.</span></li>
+          <li><span><b>Where the money went</b> for all time or any year, share of each month, and a trend per category.</span></li>
+          <li><span><b>Unusual months</b> flagged, fixed costs against variable ones, and what you saved each month.</span></li>
+          <li><span><b>Sub-categories</b> broken down too: pharmacy, doctor, visits.</span></li>
+        </ul>
+      </div>
+      <div class="shots"><div class="phone"><img src="images/analysis.webp" alt="Analysis: your average month" loading="lazy"></div><div class="phone"><img src="images/analysis-categories.webp" alt="Analysis: where the money went" loading="lazy"></div></div>
+    </div>
+
+    <div class="feature flip reveal" style="--c: rgba(45,212,191,.22)">
+      <div>
+        <div class="kicker">Bank SMS &amp; wallets</div>
+        <h2>From a bank message to an expense in two taps</h2>
+        <p class="sub">Share or paste your bank's messages, English or Arabic. The app finds the amount, the shop and the date. You choose the category.</p>
+        <ul class="ticks">
+          <li><span><b>Purchases, withdrawals and transfers</b>, grouped by day. Ignore several at once with a long-press.</span></li>
+          <li><span><b>Money in</b> goes in as income or into one of your wallets.</span></li>
+          <li><span><b>Wallets</b> for pocket money or a trip. A picked wallet never goes below zero.</span></li>
+          <li><span><b>Nothing is added by itself.</b> Messages are read on the phone and never leave it.</span></li>
+        </ul>
+      </div>
+      <div class="shots"><div class="phone"><img src="images/sms.webp" alt="Bank SMS: messages turned into transactions" loading="lazy"></div><div class="phone"><img src="images/wallets.webp" alt="Wallets with what is left" loading="lazy"></div></div>
+    </div>
+  </section>
+
+  <section id="excel" class="reveal">
+    <div class="kicker">Excel is the database</div>
+    <h2>Every amount is a cell you can see</h2>
+    <p class="sub">One sheet per month, one column per category. Sub-categories are cell notes, and hidden sheets keep the app's log and settings. Typed something straight into Excel? The app picks it up. Every save is checked before it replaces your file, and a backup is kept.</p>
+    <div class="sheet" role="img" aria-label="A month sheet in Excel with one column per category">
+      <div class="bar"><i></i><i></i><i></i><span>Book1.xlsx</span></div>
+      <div class="grid">
+        <div class="h"></div><div class="h">rent</div><div class="h">food</div><div class="h">transport</div><div class="h">bills</div><div class="h">fun</div>
+        <div class="n">2</div><div>5,000</div><div>135</div><div>110</div><div class="note">850</div><div>320</div>
+        <div class="n">3</div><div></div><div class="note">175</div><div>60</div><div>300</div><div></div>
+        <div class="n">4</div><div></div><div>420</div><div>95</div><div></div><div>540</div>
+        <div class="n">5</div><div></div><div class="new">260</div><div></div><div></div><div></div>
+      </div>
+      <div class="tabs"><span>sep 26</span><span class="on">oct 26</span><span class="hid">_log</span><span class="hid">_settings</span></div>
+    </div>
+  </section>
+
+  <section id="buddy">
+    <div class="feature reveal" style="--c: rgba(236,72,153,.25)">
+      <div>
+        <div class="kicker">The Buddy</div>
+        <h2>A friend who reads your spending, in the voice you pick</h2>
+        <p class="sub">A few minutes after you save something, Buddy compares it with your own last six months and says what stands out. At most twice a day, never at night, all on the phone.</p>
+        <div class="notif"><i>B</i><div><b>Buddy</b><br>Outings is at 2.1× its usual this month. The month isn't over yet 👀<small>now · Buddy Expense Analysis</small></div></div>
+      </div>
+      <div class="shots"><div class="phone"><img src="images/settings-buddy.webp" alt="Choosing Buddy's voice in Settings" loading="lazy"></div></div>
+    </div>
+    <div class="voices reveal">
+      <div class="voice"><div class="who"><span>😈</span>Savage</div><p>"Third delivery this week. Your kitchen called. It misses you."</p><p class="ar">تالت أوردر الأسبوع ده. المطبخ بيسأل عليك.</p></div>
+      <div class="voice"><div class="who"><span>😭</span>Drama</div><p>"Outings is at twice its usual... and the month isn't even over."</p><p class="ar">الخروجات ضعف العادي... والشهر لسه مخلصش.</p></div>
+      <div class="voice"><div class="who"><span>🕺</span>Funky</div><p>"Six days under your daily average. Look at you go!"</p><p class="ar">ست أيام تحت المتوسط. إيه الحلاوة دي!</p></div>
+      <div class="voice"><div class="who"><span>👵</span>Grandma</div><p>"Habibi, the card is due in three days. Don't forget, okay?"</p><p class="ar">يا حبيبي الكارت عليه قسط بعد تلات أيام، متنساش.</p></div>
+      <div class="voice"><div class="who"><span>🧘</span>Coach</div><p>"You're 12% under last month. Keep the pace."</p><p class="ar">إنت أقل من الشهر اللي فات بـ ١٢٪. كمّل كده.</p></div>
+      <div class="voice"><div class="who"><span>🎲</span>Surprise me</div><p>A different voice every time, so the same fact never sounds the same twice.</p></div>
+    </div>
+  </section>
+
+  <div class="arabic reveal">
+    <div class="phone"><img src="images/home-ar.webp" alt="The Home screen in Arabic" loading="lazy"></div>
+    <div>
+      <p class="ar">بالعربي كمان</p>
+      <h2>Fully in Arabic, right to left</h2>
+      <p>Every screen, every message and Buddy's voice work in Arabic, with amounts and charts kept readable. Bank SMS in Arabic are understood too, from purchases to "على حسابكم" salary transfers.</p>
+    </div>
+  </div>
+
+  <section id="screens">
+    <div class="kicker">Screens</div>
+    <h2>Take a look around</h2>
+    <p class="sub">Real screens from the app's demo mode. Tap one to see it bigger.</p>
+    <div class="gallery reveal" id="gallery">
+      <figure><div class="phone"><img src="images/home.webp" alt="Home" loading="lazy"></div><figcaption>Home</figcaption></figure>
+      <figure><div class="phone"><img src="images/home-2.webp" alt="Where it went" loading="lazy"></div><figcaption>Where it went</figcaption></figure>
+      <figure><div class="phone"><img src="images/money.webp" alt="Money in and out" loading="lazy"></div><figcaption>Money in &amp; out</figcaption></figure>
+      <figure><div class="phone"><img src="images/money-cards.webp" alt="Credit cards" loading="lazy"></div><figcaption>Credit cards</figcaption></figure>
+      <figure><div class="phone"><img src="images/money-debts.webp" alt="Debts and gam'eya" loading="lazy"></div><figcaption>Debts &amp; gam'eya</figcaption></figure>
+      <figure><div class="phone"><img src="images/analysis.webp" alt="Average month" loading="lazy"></div><figcaption>Average month</figcaption></figure>
+      <figure><div class="phone"><img src="images/analysis-categories.webp" alt="Categories" loading="lazy"></div><figcaption>Categories</figcaption></figure>
+      <figure><div class="phone"><img src="images/analysis-insights.webp" alt="Insights" loading="lazy"></div><figcaption>Insights</figcaption></figure>
+      <figure><div class="phone"><img src="images/history.webp" alt="History" loading="lazy"></div><figcaption>History</figcaption></figure>
+      <figure><div class="phone"><img src="images/add.webp" alt="Add an expense" loading="lazy"></div><figcaption>Add an expense</figcaption></figure>
+      <figure><div class="phone"><img src="images/sms.webp" alt="Bank SMS" loading="lazy"></div><figcaption>Bank SMS</figcaption></figure>
+      <figure><div class="phone"><img src="images/wallets.webp" alt="Wallets" loading="lazy"></div><figcaption>Wallets</figcaption></figure>
+      <figure><div class="phone"><img src="images/settings-buddy.webp" alt="Buddy's voices" loading="lazy"></div><figcaption>Buddy's voices</figcaption></figure>
+      <figure><div class="phone"><img src="images/menu.webp" alt="Side menu" loading="lazy"></div><figcaption>Side menu</figcaption></figure>
+      <figure><div class="phone"><img src="images/home-ar.webp" alt="Home in Arabic" loading="lazy"></div><figcaption>بالعربي</figcaption></figure>
+    </div>
+  </section>
+
+  <section id="privacy">
+    <div class="kicker">Private by design</div>
+    <h2>Your data never leaves your phone</h2>
+    <p class="sub">The app doesn't even ask for internet access, so it couldn't send your data anywhere if it wanted to. <a href="privacy.html">Read the privacy policy →</a></p>
+    <div class="cards reveal">
+      <div class="card"><div class="ic" style="background: rgba(167,139,250,.15)">🔒</div><h3>No account</h3><p>No sign-up, no login, nothing to remember.</p></div>
+      <div class="card"><div class="ic" style="background: rgba(45,212,191,.15)">📵</div><h3>No internet</h3><p>No servers, analytics, ads or trackers. Everything runs on the phone.</p></div>
+      <div class="card"><div class="ic" style="background: rgba(251,191,36,.15)">📄</div><h3>Your file</h3><p>A normal .xlsx you can open, edit, copy or back up anywhere.</p></div>
+      <div class="card"><div class="ic" style="background: rgba(236,72,153,.15)">🛟</div><h3>Backups</h3><p>A copy before every change, restore in one tap, or share a backup.</p></div>
+    </div>
+  </section>
+
+  <section id="tech">
+    <div class="kicker">How it's built</div>
+    <h2>Small, careful, offline</h2>
+    <div class="cards reveal">
+      <div class="card"><h3>Kotlin + Compose</h3><p>Material 3 with the Night Sky look: four swipeable tabs and a side menu.</p></div>
+      <div class="card"><h3>Apache POI</h3><p>Reads and writes the workbook. Every save is checked before it replaces the file.</p></div>
+      <div class="card"><h3>Pure-Kotlin core</h3><p>All money logic (wallets, carry-over, cards, gam'eya, SMS parsing) in one tested module.</p></div>
+      <div class="card"><h3>Two builds</h3><p>One that reads the SMS inbox, and one without any SMS permission that installs anywhere.</p></div>
+    </div>
+  </section>
+
+  <section id="soon">
+    <div class="kicker">Coming soon</div>
+    <h2>What's next</h2>
+    <div class="soon reveal">
+      <div class="card"><div class="ic" style="background: rgba(167,139,250,.15)">✨</div><h3>Buddy Assistant</h3><p>Ask about your money ("how much went on outings this year?"), get advice after a heavy month, and plan what to save.</p></div>
+      <div class="card"><div class="ic" style="background: rgba(45,212,191,.15)">🧾</div><h3>Receipt scanning</h3><p>Take a picture of a receipt, and the app reads the amount and the shop and suggests a category.</p></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Made by <a href="https://github.com/mohamed-ibrahim47">Mohamed Ibrahim</a>. The source code is private; this page shows what the app does.</span>
+    <a href="privacy.html">Privacy policy</a>
+  </div>
+</footer>
+
+<div class="lb" id="lb" role="dialog" aria-label="Screenshot"><button aria-label="Close" id="lbClose">✕</button><img alt=""></div>
+
+<script>
+(function () {
+  // a few stars in the sky
+  const sky = document.getElementById('sky');
+  for (let i = 0; i < 46; i++) {
+    const s = document.createElement('i');
+    s.className = 'star';
+    s.style.left = Math.random() * 100 + '%';
+    s.style.top = Math.random() * 100 + '%';
+    s.style.animationDelay = (Math.random() * 4) + 's';
+    if (Math.random() < .2) { s.style.width = s.style.height = '3px'; }
+    sky.appendChild(s);
+  }
+  // sections slide in as they come into view
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  // tap a screenshot to see it bigger
+  const lb = document.getElementById('lb'), big = lb.querySelector('img');
+  document.querySelectorAll('.gallery .phone img, .shots .phone img').forEach(img => img.addEventListener('click', () => {
+    big.src = img.src; big.alt = img.alt; lb.classList.add('on');
+  }));
+  const close = () => lb.classList.remove('on');
+  lb.addEventListener('click', e => { if (e.target === lb) close(); });
+  document.getElementById('lbClose').addEventListener('click', close);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+})();
+</script>
+</body>
+</html>
