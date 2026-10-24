@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108 108">
+  <!-- the app icon: spending (violet) climbing over the dashed teal "usual" line -->
+  <rect width="108" height="108" rx="26" fill="#161A33"/>
+  <g transform="translate(54 54) scale(1.1) translate(-54 -54)" fill="none" stroke-linecap="round">
+    <path stroke="#2DD4BF" stroke-width="3" d="M24,60h5 M35,60h5 M46,60h5 M57,60h5 M68,60h5 M79,60h5"/>
+    <path stroke="#A78BFA" stroke-width="6" stroke-linejoin="round" d="M26,70L39,63L51,67L64,51L80,37"/>
+    <circle cx="80" cy="37" r="6" fill="#FFFFFF" stroke="none"/>
+  </g>
+</svg>

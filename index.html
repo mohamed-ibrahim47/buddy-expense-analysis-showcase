@@ -9,13 +9,14 @@
 <meta property="og:description" content="Your money, in your own Excel file. With a Buddy who notices.">
 <meta property="og:image" content="images/home.webp">
 <meta name="theme-color" content="#090B14">
+<link rel="icon" href="images/icon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Cairo:wght@500;700&display=swap">
 <style>
 :root {
   --bg: #090B14; --s1: #111426; --s2: #161A33; --s3: #1F2443; --line: #262B4A;
   --tx: #EDEEF6; --mu: #A5A9C4; --dim: #7C82A6;
-  --vi: #A78BFA; --pk: #EC4899; --te: #2DD4BF; --am: #FBBF24; --lime: #D4FF3A;
+  --vi: #A78BFA; --pk: #EC4899; --te: #2DD4BF; --am: #FBBF24;
   --grad: linear-gradient(135deg, #8B5CF6, #EC4899);
   --hero: linear-gradient(135deg, #4338CA, #7C3AED 55%, #DB2777);
 }
@@ -37,7 +38,7 @@ img { display: block; max-width: 100%; }
 nav { position: sticky; top: 0; z-index: 10; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); background: rgba(9,11,20,.7); border-bottom: 1px solid rgba(255,255,255,.06); }
 nav .wrap { display: flex; align-items: center; gap: 24px; height: 64px; }
 .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; color: var(--tx); }
-.logo i { width: 34px; height: 34px; border-radius: 11px; background: var(--grad); display: grid; place-items: center; font-style: normal; color: #fff; box-shadow: 0 6px 18px rgba(236,72,153,.35); }
+.logo img { width: 34px; height: 34px; border-radius: 10px; box-shadow: 0 6px 18px rgba(139,92,246,.35); }
 nav .links { display: flex; gap: 22px; margin-left: auto; font-size: 14px; font-weight: 600; }
 nav .links a { color: var(--mu); }
 nav .links a:hover { color: var(--tx); }
@@ -189,7 +190,7 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 16px; justify-content: space
 
 <nav>
   <div class="wrap">
-    <a class="logo" href="#top"><i>B</i>Buddy Expense Analysis</a>
+    <a class="logo" href="#top"><img src="images/icon.svg" alt="">Buddy Expense Analysis</a>
     <div class="links">
       <a href="#features">Features</a>
       <a href="#buddy">The Buddy</a>
@@ -202,7 +203,7 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 16px; justify-content: space
 <main class="wrap" id="top">
   <div class="hero">
     <div class="reveal">
-      <span class="badge"><b></b>Android · English &amp; العربية · Version 4.0</span>
+      <span class="badge"><b></b>Android · English &amp; العربية · Version 5.1</span>
       <h1>Your money, in <em>your own Excel file</em>. With a Buddy who notices.</h1>
       <p class="lead">No account, no server, no internet permission. Every expense is a cell in a normal .xlsx file on your phone that you can open in Excel any time. The app reads it, writes to it, and makes sense of it.</p>
       <div class="cta">
@@ -221,7 +222,7 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 16px; justify-content: space
   <div class="stats reveal">
     <div class="stat"><b>0</b><span>accounts, servers or trackers</span></div>
     <div class="stat"><b>1</b><span>Excel file: yours, readable anywhere</span></div>
-    <div class="stat"><b>260+</b><span>automated tests on the money logic</span></div>
+    <div class="stat"><b>290+</b><span>automated tests on the money logic</span></div>
     <div class="stat"><b>2</b><span>languages, English and Arabic</span></div>
   </div>
 
@@ -233,15 +234,16 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 16px; justify-content: space
         <p class="sub">Open the app and know where you stand before you've finished your coffee.</p>
         <ul class="ticks">
           <li><span><b>A running line</b> of the month's spending against an even pace, and where the month is heading.</span></li>
-          <li><span><b>A double ring:</b> how much of your income is gone, and how much of the month has passed.</span></li>
-          <li><span><b>Buddy's note</b> on the one thing that stands out, like a category at twice its usual.</span></li>
+          <li><span><b>Where it went:</b> your biggest categories, with a red <b>"3× usual"</b> badge on any running far above normal.</span></li>
+          <li><span><b>Money left last month?</b> One tap puts it in a Savings wallet, so it stays saved instead of quietly disappearing.</span></li>
           <li><span><b>Step back</b> through earlier months, hide the total like a banking app, and see the next payments due.</span></li>
+          <li><span><b>A setup tour</b> that starts with your categories and income, and a tip behind every ⓘ.</span></li>
         </ul>
       </div>
-      <div class="shots"><div class="phone"><img src="images/home.webp" alt="Home: month total, running line, income ring and Buddy's note" loading="lazy"></div><div class="phone"><img src="images/home-2.webp" alt="Home: where the money went, by category" loading="lazy"></div></div>
+      <div class="shots"><div class="phone"><img src="images/home.webp" alt="Home: month total, running line and last month's leftover" loading="lazy"></div><div class="phone"><img src="images/home-2.webp" alt="Where it went, with a badge on an unusual category" loading="lazy"></div></div>
     </div>
 
-    <div class="feature flip reveal" style="--c: rgba(212,255,58,.22)">
+    <div class="feature flip reveal" style="--c: rgba(219,39,119,.24)">
       <div>
         <div class="kicker">Money in &amp; out</div>
         <h2>Cards, instalments and gam'eya, sorted</h2>
@@ -264,14 +266,29 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 16px; justify-content: space
         <ul class="ticks">
           <li><span><b>Your average month</b>, and each category this month next to its usual.</span></li>
           <li><span><b>Where the money went</b> for all time or any year, share of each month, and a trend per category.</span></li>
-          <li><span><b>Unusual months</b> flagged, fixed costs against variable ones, and what you saved each month.</span></li>
+          <li><span><b>Unusual months</b> flagged, fixed costs against variable ones, and what you saved each month, including how much of a good month paid back an earlier overspend.</span></li>
           <li><span><b>Sub-categories</b> broken down too: pharmacy, doctor, visits.</span></li>
         </ul>
       </div>
       <div class="shots"><div class="phone"><img src="images/analysis.webp" alt="Analysis: your average month" loading="lazy"></div><div class="phone"><img src="images/analysis-categories.webp" alt="Analysis: where the money went" loading="lazy"></div></div>
     </div>
 
-    <div class="feature flip reveal" style="--c: rgba(45,212,191,.22)">
+    <div class="feature flip reveal" style="--c: rgba(167,139,250,.3)">
+      <div>
+        <div class="kicker">Adding &amp; history</div>
+        <h2>Circle a few amounts, see what they add up to</h2>
+        <p class="sub">Adding an expense is a category, an amount and Save. Looking back is just as quick.</p>
+        <ul class="ticks">
+          <li><span><b>Circle to sum.</b> Hold, then draw a loop around amounts in History, like circling something to search it. The total shows straight away.</span></li>
+          <li><span><b>Sub-categories that keep up:</b> your most used come first, the rest A to Z, and a new one is one tap away.</span></li>
+          <li><span><b>A change log for every amount:</b> when it was added, raised, moved or typed in Excel, as clear before-and-after cards.</span></li>
+          <li><span><b>Big numbers welcome:</b> amounts into the billions, with commas as you type.</span></li>
+        </ul>
+      </div>
+      <div class="shots"><div class="phone"><img src="images/history-circling.webp" alt="Drawing a loop around amounts in History" loading="lazy"></div><div class="phone"><img src="images/history-sum.webp" alt="The circled amounts and their total" loading="lazy"></div></div>
+    </div>
+
+    <div class="feature reveal" style="--c: rgba(45,212,191,.22)">
       <div>
         <div class="kicker">Bank SMS &amp; wallets</div>
         <h2>From a bank message to an expense in two taps</h2>
@@ -336,7 +353,7 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 16px; justify-content: space
   <section id="screens">
     <div class="kicker">Screens</div>
     <h2>Take a look around</h2>
-    <p class="sub">Real screens from the app's demo mode. Tap one to see it bigger.</p>
+    <p class="sub">Real screens from the app's demo mode, with made-up data. Tap one to see it bigger.</p>
     <div class="gallery reveal" id="gallery">
       <figure><div class="phone"><img src="images/home.webp" alt="Home" loading="lazy"></div><figcaption>Home</figcaption></figure>
       <figure><div class="phone"><img src="images/home-2.webp" alt="Where it went" loading="lazy"></div><figcaption>Where it went</figcaption></figure>
@@ -346,13 +363,18 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 16px; justify-content: space
       <figure><div class="phone"><img src="images/analysis.webp" alt="Average month" loading="lazy"></div><figcaption>Average month</figcaption></figure>
       <figure><div class="phone"><img src="images/analysis-categories.webp" alt="Categories" loading="lazy"></div><figcaption>Categories</figcaption></figure>
       <figure><div class="phone"><img src="images/analysis-insights.webp" alt="Insights" loading="lazy"></div><figcaption>Insights</figcaption></figure>
-      <figure><div class="phone"><img src="images/history.webp" alt="History" loading="lazy"></div><figcaption>History</figcaption></figure>
+      <figure><div class="phone"><img src="images/history.webp" alt="History with the circle-to-sum tip" loading="lazy"></div><figcaption>History</figcaption></figure>
+      <figure><div class="phone"><img src="images/history-circling.webp" alt="Circling amounts" loading="lazy"></div><figcaption>Circle to sum</figcaption></figure>
+      <figure><div class="phone"><img src="images/history-sum.webp" alt="The total of the circled amounts" loading="lazy"></div><figcaption>Their total</figcaption></figure>
       <figure><div class="phone"><img src="images/add.webp" alt="Add an expense" loading="lazy"></div><figcaption>Add an expense</figcaption></figure>
+      <figure><div class="phone"><img src="images/add-sub.webp" alt="Picking a sub-category" loading="lazy"></div><figcaption>Sub-categories</figcaption></figure>
       <figure><div class="phone"><img src="images/sms.webp" alt="Bank SMS" loading="lazy"></div><figcaption>Bank SMS</figcaption></figure>
       <figure><div class="phone"><img src="images/wallets.webp" alt="Wallets" loading="lazy"></div><figcaption>Wallets</figcaption></figure>
       <figure><div class="phone"><img src="images/settings-buddy.webp" alt="Buddy's voices" loading="lazy"></div><figcaption>Buddy's voices</figcaption></figure>
       <figure><div class="phone"><img src="images/menu.webp" alt="Side menu" loading="lazy"></div><figcaption>Side menu</figcaption></figure>
-      <figure><div class="phone"><img src="images/home-ar.webp" alt="Home in Arabic" loading="lazy"></div><figcaption>بالعربي</figcaption></figure>
+      <figure><div class="phone"><img src="images/home-ar.webp" alt="Home in Arabic" loading="lazy"></div><figcaption>الرئيسية</figcaption></figure>
+      <figure><div class="phone"><img src="images/history-ar.webp" alt="History in Arabic" loading="lazy"></div><figcaption>السجل</figcaption></figure>
+      <figure><div class="phone"><img src="images/money-cards-ar.webp" alt="Credit cards in Arabic" loading="lazy"></div><figcaption>البطاقات</figcaption></figure>
     </div>
   </section>
 

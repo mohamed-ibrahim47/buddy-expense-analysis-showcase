@@ -1,8 +1,10 @@
 # Buddy Expense Analysis
 
-**A personal finance app for Android that keeps your money in your own Excel file, and a Buddy that tells you when you're slipping.**
+**Your money, in your own Excel file, with a Buddy who notices. An Android app with no account and no server.**
 
-No account, no server, no internet permission. Your spending lives in a normal `.xlsx` file on your phone that you can open in Excel any time. The app reads it, writes to it, and makes sense of it.
+Every expense is a cell in a normal `.xlsx` file on your phone that you can open in Excel any time. The app reads it, writes to it, and makes sense of it: where the money went, what's unusual for you, what's due next, and what's left.
+
+**[See the full page with every screen →](https://mohamed-ibrahim47.github.io/buddy-expense-analysis-showcase/)**
 
 > The source code is private. This page shows what the app does and how it works.
 
@@ -10,49 +12,80 @@ No account, no server, no internet permission. Your spending lives in a normal `
 
 ## Screenshots
 
-See the full page with all screens at **[mohamed-ibrahim47.github.io/buddy-expense-analysis-showcase](https://mohamed-ibrahim47.github.io/buddy-expense-analysis-showcase/)**.
+Real screens from the app's demo mode.
 
-| Home | Credit cards | Debts & gam'eya | Analysis |
+| Home | Where it went | Circle to sum | Add an expense |
 |---|---|---|---|
-| <img src="images/home.webp" width="200" alt="Home"> | <img src="images/money-cards.webp" width="200" alt="Credit cards"> | <img src="images/money-debts.webp" width="200" alt="Debts and gam'eya"> | <img src="images/analysis-categories.webp" width="200" alt="Analysis"> |
+| <img src="images/home.webp" width="200" alt="Home with last month's leftover"> | <img src="images/home-2.webp" width="200" alt="Where it went, with a badge on an unusual category"> | <img src="images/history-circling.webp" width="200" alt="Drawing a loop around amounts in History"> | <img src="images/add-sub.webp" width="200" alt="Picking a sub-category, most used first"> |
+
+| Money | Credit cards | Analysis | Insights |
+|---|---|---|---|
+| <img src="images/money.webp" width="200" alt="Money in and out"> | <img src="images/money-cards.webp" width="200" alt="Credit cards stacked like a phone wallet"> | <img src="images/analysis-categories.webp" width="200" alt="Where the money went over time"> | <img src="images/analysis-insights.webp" width="200" alt="Insights and savings"> |
 
 | Bank SMS | Wallets | Buddy's voices | بالعربي |
 |---|---|---|---|
-| <img src="images/sms.webp" width="200" alt="Bank SMS"> | <img src="images/wallets.webp" width="200" alt="Wallets"> | <img src="images/settings-buddy.webp" width="200" alt="Buddy's voices"> | <img src="images/home-ar.webp" width="200" alt="Home in Arabic"> |
+| <img src="images/sms.webp" width="200" alt="Bank messages turned into expenses"> | <img src="images/wallets.webp" width="200" alt="Wallets with what is left"> | <img src="images/settings-buddy.webp" width="200" alt="Choosing Buddy's voice"> | <img src="images/home-ar.webp" width="200" alt="Home in Arabic"> |
+
+## The core idea: Excel is the database
+
+- **One sheet per month** (`oct 26`), one column per category. Every amount is a cell you can see.
+- **Sub-categories are cell notes**, and hidden sheets keep the app's log and settings.
+- **Typed something straight into Excel?** The app picks it up next time it opens.
+- **Every save is checked** (zip structure and checksums) before it replaces your file, and a backup is kept.
+
+Nothing is sent anywhere. The app doesn't even ask for internet access.
 
 ## What it does
 
-- **Excel as the database.** Every amount is a cell in a month sheet (`oct 26`), sub-categories are cell notes, and hidden sheets keep the app's log and settings. Typed something straight into Excel? The app picks it up.
-- **Spending by day.** See what you spent each day. Raise an amount a week later and only the extra counts on the new day.
-- **Change history.** Every amount keeps the date it was added, plus a log of each later change.
-- **Wallets.** Put aside pocket money and let expenses come out of it, all of them, picked ones, or certain categories. A wallet stops at zero, and an expense bigger than a picked wallet holds is refused.
-- **Cards, instalments and gam'eya.** Credit cards stacked like a phone wallet; instalments, loans and gam'eya as progress rings with the next payment, and your gam'eya payout turn marked.
-- **Sub-categories with totals.** Pharmacy, doctor, visits: collapsible groups with their own totals.
-- **Bank SMS capture.** Turn your bank's messages into expenses or income, grouped by date. Optional, this month by default, you pick the months.
-- **Overspending carries over.** Went past your salary on credit? Next month starts in the negative until you pay it back (a setting).
-- **Recurring payments**, a **home-screen widget** for quick adds, **backups and restore**, a **demo mode**, and an **onboarding tour**.
-- **Arabic and English**, with Egyptian Arabic for the Buddy's voice.
+- **Every day**
+  - **Add in seconds:** category, amount, Save. Sub-categories show your most used first, the rest A to Z, and a new one is one tap away.
+  - **Spending by day.** Raise an amount a week later and only the extra counts on the new day.
+  - **Circle to sum.** In History, hold, then draw a loop around amounts, like circling something to search it. Their total shows on top.
+  - **A change log for every amount:** when it was added, raised, moved or typed in Excel, as before-and-after cards.
+  - **Big numbers welcome:** amounts into the billions, with commas as you type.
+- **Money in and out**
+  - **What's left** this month after everything still due, with income, spent and due side by side.
+  - **Credit cards** stacked like a phone wallet; **instalments, loans and gam'eya** as progress rings with the next payment and your payout turn.
+  - **Next salary:** buy now, and the amount comes off the next income you add.
+  - **Overspending carries over** (a setting): went past your income on credit? Next month starts in the negative until a good month pays it back.
+  - **Month-end savings:** ended a month with money left? Home offers to put it in a Savings wallet in one tap.
+  - **Wallets** for pocket money or a trip: all expenses, picked ones, or certain categories. A wallet stops at zero.
+  - **Bank SMS** (optional): turn your bank's messages into expenses or income, grouped by day. Nothing is added by itself.
+- **Analysis**
+  - **Your average month**, and each category this month next to its usual.
+  - **Where it went** for all time or any year, a trend per category, and sub-categories broken down.
+  - **Unusual months** flagged, fixed costs against variable ones, and what each month saved, including how much of it paid back an earlier overspend.
+- **Getting started**
+  - **A setup tour** that starts with your categories and income, then shows each tab.
+  - **Tips** behind every ⓘ, and a demo mode to try everything with made-up data.
+  - **Arabic and English**, fully right to left, with Egyptian Arabic for Buddy's voice.
 
-## The Buddy: how the notifications work
+## How the Buddy works
 
 The Buddy isn't a list of fixed reminders. It works in three steps, all on the phone:
 
-1. **Signals.** The app reads your ledger and finds what's worth saying: a category running far ahead of its usual pace, a day with no expenses logged, a month going over income, a wallet about to run out.
-2. **Personas.** Each signal is said in the voice of a character (savage, emotional, funky, a caring grandma, a coach, or "surprise me") and from an angle, so the same fact doesn't sound the same twice.
-3. **Timing.** A light alarm wakes the app at a sensible time of day, it picks the strongest signal, and shows one notification. No background service and no server: it's quiet when there's nothing to say.
+| Step | What happens |
+|---|---|
+| **Signals** | The app reads your ledger and finds what's worth saying: a category far ahead of its usual pace, a day with nothing logged, a month going over income, a wallet about to run out. |
+| **Voices** | Each signal is said in the voice you pick (savage, drama, funky, grandma, coach, or "surprise me") and from a different angle, so the same fact never sounds the same twice. |
+| **Timing** | A light alarm wakes the app at a sensible hour, it picks the strongest signal, and shows one notification. At most twice a day, never at night, and quiet when there's nothing to say. |
+
+## Privacy
+
+No account, no login, no internet permission, no analytics, no ads. Your file stays on your phone, with a backup before every change. Full details in the **[privacy policy](https://mohamed-ibrahim47.github.io/buddy-expense-analysis-showcase/privacy.html)**.
 
 ## How it's built
 
-- **Kotlin + Jetpack Compose**, Material 3 in a "Night Sky" look: a 4-tab layout with swipe, a floating bottom bar and a side menu.
-- **Apache POI** reads and writes the workbook. Every save is checked (zip structure and checksums) before it replaces the file, and known causes of "Excel says the file is damaged" are repaired automatically on load.
-- **A pure-Kotlin core module** holds all the money logic (daily spending, wallets, carry-over, recurring, SMS parsing), covered by 260+ unit tests.
-- **Two builds**: one without any SMS permission (paste/share a message instead), and one that reads the bank SMS inbox.
+- **Kotlin + Jetpack Compose**, Material 3 in a "Night Sky" look: four swipeable tabs, a floating bottom bar and a side menu.
+- **Apache POI** reads and writes the workbook, and known causes of "Excel says the file is damaged" are repaired on load.
+- **A pure-Kotlin core module** holds all the money logic (daily spending, wallets, carry-over, cards, gam'eya, SMS parsing, the Buddy), covered by 290+ unit tests.
+- **Two builds:** one that reads the bank SMS inbox, and one without any SMS permission (paste or share a message instead).
 
-## Coming soon
+## Coming next
 
-- **Buddy Assistant**: ask about your money, get advice after a bad month, and start saving and investing what's left.
-- **Receipt scanning**: take a picture, and the app reads it and suggests a category.
+- **Buddy Assistant:** ask about your money, get advice after a heavy month, and plan what to save.
+- **Receipt scanning:** take a picture, and the app reads it and suggests a category.
 
 ---
 
-Made by [Mohamed Ibrahim](https://github.com/mohamed-ibrahim47).
+Made by [Mohamed Ibrahim](https://github.com/mohamed-ibrahim47) · [Privacy policy](https://mohamed-ibrahim47.github.io/buddy-expense-analysis-showcase/privacy.html)
